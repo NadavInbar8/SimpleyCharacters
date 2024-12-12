@@ -1,4 +1,4 @@
-import { Flexbox } from "../Flexbox";
+import { Flexbox } from "../Flexbox/Flexbox";
 import styled from "styled-components";
 import { MainMenu } from "./MainMenu";
 import { Button as ButtonOrigin } from "../Button/Button";

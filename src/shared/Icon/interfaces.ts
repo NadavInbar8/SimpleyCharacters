@@ -1,18 +1,3 @@
-import { ReactNode } from "react";
-
-export interface LayoutProps {
-  children: ReactNode;
-}
-
-export interface ButtonProps {
-  children?: ReactNode;
-  icon?: string;
-  iconType?: string;
-  iconProps?: Partial<IconProps>;
-  forwardRef?: React.Ref<HTMLButtonElement>;
-  [key: string]: any; // To allow additional props
-}
-
 export interface IconProps {
   src: string;
   type: string;

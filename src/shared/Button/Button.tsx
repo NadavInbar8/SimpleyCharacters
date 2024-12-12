@@ -1,9 +1,8 @@
 import { forwardRef } from "react";
 import styled from "styled-components";
-import { Flexbox } from "../Flexbox";
-import { Icon as IconOrigin } from "../Icon";
-import { ButtonProps } from "../interfaces";
-import { ButtonWrapperProps } from "./interfaces";
+import { Flexbox } from "../Flexbox/Flexbox";
+import { Icon as IconOrigin } from "../Icon/Icon";
+import { ButtonProps, ButtonWrapperProps } from "./interfaces";
 import { BUTTON_ALIGNMENTS, BUTTON_SIZES, BUTTON_TYPES } from "./constants";
 
 const Wrapper = styled.button.attrs((props) => ({
