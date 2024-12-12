@@ -6,6 +6,7 @@ import { PageContainerProps } from "./interfaces";
 export const PageWrapper = styled(Flexbox)`
   color: ${({ theme }) => theme.colors.white};
   flex-direction: column;
+  gap: ${({ theme }) => theme.spaces8[3]};
 `;
 
 export const PageContainer = ({ children }: PageContainerProps) => {
