@@ -9,7 +9,7 @@ const Wrapper = styled(Flexbox)`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.blue5};
   max-height: ${({ theme }) => theme.spaces8[3]};
-  padding: ${({ theme }) => theme.spaces8[2]};
+  padding: ${({ theme }) => theme.spaces8[2]} ${({ theme }) => theme.spaces8[4]};
   position: relative;
   &::after {
     background: ${({ theme }) => theme.colors.grey2};

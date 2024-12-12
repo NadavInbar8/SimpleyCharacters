@@ -22,7 +22,6 @@ const Wrapper = styled(Flexbox)<WrapperProps>`
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
     background-color: ${theme.colors.blue5};
   `};
-
   flex: ${({ col }) => col};
   overflow: hidden;
   position: relative;
@@ -36,7 +35,7 @@ export const Card: React.FC<CardProps> = ({
   column = true,
   noBackground = false,
   noPadding = false,
-  noMargin = true,
+  noMargin = false,
   children,
 }) => (
   <Wrapper
