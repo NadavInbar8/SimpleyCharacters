@@ -6,8 +6,8 @@ export const Flexbox = styled.div<FlexboxProps>`
   ${(props) =>
     props.textA &&
     `
-		text-align: ${props.textA};
-	`};
+  		text-align: ${props.textA};
+  `};
   ${(props) =>
     props.center &&
     `

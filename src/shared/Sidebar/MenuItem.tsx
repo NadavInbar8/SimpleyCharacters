@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { Flexbox } from "../Flexbox/Flexbox";
-import { Link } from "../Link";
+import { Flexbox, Link } from "../index";
 import { ReactNode } from "react";
 
 const Wrapper = styled(Flexbox)`

@@ -1,7 +1,7 @@
 import { ThemeProvider } from "styled-components";
 import { GlobalCSS, theme } from "../theme.ts";
 import styled from "styled-components";
-import { Flexbox, Sidebar } from "../shared/index.ts";
+import { Flexbox, Sidebar } from "../shared";
 import { LayoutProps } from "./interface.ts";
 
 const Wrapper = styled.div`
