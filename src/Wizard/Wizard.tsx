@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { Card, Flexbox, PageContainer, Titlebar } from "../shared";
 import { useForm, FormProvider } from "react-hook-form";
 import { WizardButtons } from "./WizardButtons";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useWizard } from "../shared/hooks/useWizard";
-import { STEP_TITLES } from "./constants";
+import { STEPS } from "./constants";
 
 const FullWidth = styled(Flexbox)`
   align-items: start;
@@ -20,6 +20,11 @@ export type Inputs = {
 
 export const Wizard: React.FC = () => {
   const { currentStep, title, setTitle } = useWizard();
+  const stepInfo = useMemo(() => STEPS[currentStep], [currentStep, STEPS]);
+  const CurrentStepComponent = useMemo(
+    () => stepInfo && stepInfo.Component,
+    [stepInfo]
+  );
 
   const methods = useForm<Inputs>({
     mode: "onBlur",
@@ -41,7 +46,7 @@ export const Wizard: React.FC = () => {
   }, [trigger]);
 
   useEffect(() => {
-    setTitle(STEP_TITLES[currentStep]);
+    setTitle(stepInfo.title);
   }, [currentStep]);
 
   const onSubmit = (data: Inputs) => {
@@ -57,7 +62,7 @@ export const Wizard: React.FC = () => {
         <FullWidth>
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
-              {/* Step components will go here */}
+              <CurrentStepComponent />
             </form>
           </FormProvider>
         </FullWidth>

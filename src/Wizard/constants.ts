@@ -1,5 +1,11 @@
-export const STEP_TITLES: Record<number, string> = {
-  1: "New Character",
-  2: "Class",
-  3: "Build",
+import { ComponentType } from "react";
+import { NewCharacter } from "./Steps/NewCharacter";
+
+interface Step {
+  Component: ComponentType;
+  title: string;
+}
+
+export const STEPS: Record<number, Step> = {
+  1: { Component: NewCharacter, title: "New Character" },
 };
