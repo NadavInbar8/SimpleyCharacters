@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Controller, Control } from "react-hook-form";
 import styled from "styled-components";
 import { Error } from "../Typography/Typography";
 import { Scrollbars } from "../Scrollable/Scrollbars";
 import Select, { Props as ReactSelectProps } from "react-select";
+import { InteractivePlaceholder } from "../InteractivePlaceholder";
 
 // Define the option type
 export interface Option {
@@ -18,9 +19,10 @@ interface SelectProps {
   options: Option[];
   placeholder?: string;
   disabled?: boolean;
-  error?: string;
+  error?: any;
   filled?: boolean;
   focused?: boolean;
+  interactivePlaceholder?: string;
 }
 
 interface ExtendedSelectProps extends ReactSelectProps<Option, false> {
@@ -54,6 +56,13 @@ const BaseStyledSelect = styled(Select).attrs<ExtendedSelectProps>(() => ({
           cursor: pointer;
         }
       }
+    }
+  }
+
+  .react-select__option {
+    &:hover {
+      background: ${({ theme }) => theme.colors.blue3};
+      cursor: pointer;
     }
   }
 
@@ -136,13 +145,31 @@ const StyledSelect: React.FC<SelectProps> = ({
   control,
   options,
   placeholder = "Select...",
-  disabled,
+  disabled = false,
   error,
   filled,
   focused,
+  interactivePlaceholder,
 }) => {
+  const [shouldBeLabel, setShouldBeLabel] = useState(false);
+
+  const handleFocus = useCallback(() => setShouldBeLabel(true), []);
+  const handleBlur = useCallback((fieldBlur: () => void, value: any) => {
+    setShouldBeLabel(!!value);
+    fieldBlur();
+  }, []);
+
   return (
     <Wrapper>
+      {interactivePlaceholder && (
+        <InteractivePlaceholder
+          shouldBeLabel={shouldBeLabel}
+          htmlFor={name}
+          focused={focused}
+        >
+          {interactivePlaceholder}
+        </InteractivePlaceholder>
+      )}
       <Controller
         name={name}
         control={control}
@@ -150,12 +177,19 @@ const StyledSelect: React.FC<SelectProps> = ({
           <BaseStyledSelect
             {...field}
             options={options}
-            isDisabled={disabled}
             placeholder={placeholder}
-            onChange={(value) => field.onChange(value)}
+            filled={filled}
+            focused={focused}
+            isDisabled={disabled}
+            onChange={(value) => {
+              field.onChange(value);
+              setShouldBeLabel(true);
+            }}
+            onFocus={disabled ? undefined : handleFocus}
+            onBlur={
+              disabled ? undefined : () => handleBlur(field.onBlur, field.value)
+            }
             value={field.value}
-            filled={filled} // Pass filled
-            focused={focused} // Pass focused
           />
         )}
       />

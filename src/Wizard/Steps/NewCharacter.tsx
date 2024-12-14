@@ -112,6 +112,8 @@ export const NewCharacter: React.FC = ({}) => {
             placeholder="Select an option"
             filled={!!errors.mySelect}
             focused={false} // Adjust dynamically if needed
+            error={errors.mySelect?.message}
+            interactivePlaceholder={"Starting Level"}
           />
         </Flexbox>
       </Section>
