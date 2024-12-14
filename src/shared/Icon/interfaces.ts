@@ -5,7 +5,7 @@ export interface IconProps {
   color?: string; // was 'color: string'
   hoverColor?: string; // was 'hoverColor: string'
   withStates?: boolean; // was 'withStates: boolean'
-  center?: boolean;
+  $center?: boolean;
   spin?: boolean;
   blink?: boolean;
   className?: string;

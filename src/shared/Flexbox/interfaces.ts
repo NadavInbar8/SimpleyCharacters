@@ -1,6 +1,6 @@
 export interface FlexboxProps {
   textA?: string;
-  center?: boolean;
+  $center?: boolean;
   $end?: boolean;
   $start?: boolean;
   middle?: boolean;

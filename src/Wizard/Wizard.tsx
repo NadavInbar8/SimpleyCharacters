@@ -1,13 +1,10 @@
 import styled from "styled-components";
 import { Card, Flexbox, PageContainer, Titlebar } from "../shared";
-import { useCallback, useMemo } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
-import { useForm, SubmitHandler } from "react-hook-form";
-
-const Container = styled(Flexbox)`
-  flex: 1;
-  overflow: hidden;
-`;
+import { useForm, FormProvider } from "react-hook-form";
+import { WizardButtons } from "./WizardButtons";
+import { useEffect } from "react";
+import { useWizard } from "../shared/hooks/useWizard";
+import { STEP_TITLES } from "./constants";
 
 const FullWidth = styled(Flexbox)`
   align-items: start;
@@ -16,87 +13,63 @@ const FullWidth = styled(Flexbox)`
   overflow: hidden;
 `;
 
-interface Step {
-  Component: React.ComponentType<any>;
-}
-
-interface WizardProps {
-  title: string;
-  steps: Step[];
-}
-
-type Inputs = {
+export type Inputs = {
   example: string;
   exampleRequired: string;
 };
 
-export const Wizard = ({ title, steps: STEPS }: WizardProps) => {
-  let { stepNum } = useParams();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+export const Wizard: React.FC = () => {
+  const { currentStep, title, setTitle } = useWizard();
 
-  const basePath = useMemo(() => pathname.slice(0, -1), [pathname]);
-  const step = useMemo(() => {
-    const parsed = Number(stepNum);
-    return isNaN(parsed) ? 1 : parsed;
-  }, [stepNum]);
-
-  const currentStep = useMemo(() => {
-    return STEPS[step] ? step : 1;
-  }, [step, STEPS]);
-
-  const stepInfo = useMemo(() => STEPS[currentStep], [currentStep, STEPS]);
-  const CurrentStepComponent = useMemo(() => stepInfo?.Component, [stepInfo]);
-
-  const next = useCallback(() => {
-    navigate(`${basePath}${currentStep + 1}`);
-  }, [navigate, currentStep, basePath]);
-
-  const back = useCallback(() => {
-    navigate(`${basePath}${currentStep - 1}`);
-  }, [navigate, currentStep, basePath]);
-
-  //   const handleSubmit = useCallback(
-  //     (x: any) => {
-  //       console.log(">>> x", x);
-
-  //       const isLastPage = currentStep === Object.keys(STEPS).length;
-  //       if (isLastPage) {
-  //         console.log(">>>> last page");
-  //       } else {
-  //         next();
-  //       }
-  //     },
-  //     [currentStep, next, STEPS]
-  //   );
+  const methods = useForm<Inputs>({
+    mode: "onBlur",
+    defaultValues: {
+      example: "",
+      exampleRequired: "",
+    },
+  });
 
   const {
-    register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+    trigger,
+  } = methods;
+
+  // Trigger validation on mount
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
+
+  useEffect(() => {
+    setTitle(STEP_TITLES[currentStep]);
+  }, [currentStep]);
+
+  const onSubmit = (data: Inputs) => {
+    console.log(">>>", data);
+  };
+
+  const disableContinue = Object.keys(errors).length > 0;
 
   return (
     <PageContainer>
       <Titlebar>{title}</Titlebar>
       <Card>
-        {/* progress bar will be here */}
-        <Container column>
-          <FullWidth between>
-            {/* <CurrentStepComponent /> */}
+        <FullWidth>
+          <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <input defaultValue="test" {...register("example")} />
-
-              <input {...register("exampleRequired", { required: true })} />
-              {errors.exampleRequired && <span>This field is required</span>}
-
-              <input type="submit" />
+              {/* Step components will go here */}
             </form>
-          </FullWidth>
-          {/* <WizardButtons */}
-        </Container>
+          </FormProvider>
+        </FullWidth>
+        <WizardButtons
+          continueText="Continue"
+          currentStep={2}
+          loading={false}
+          onContinue={() => {
+            console.log("hello");
+          }}
+          disableContinue={disableContinue}
+        />
       </Card>
     </PageContainer>
   );

@@ -9,7 +9,7 @@ export const Flexbox = styled.div<FlexboxProps>`
   		text-align: ${props.textA};
   `};
   ${(props) =>
-    props.center &&
+    props.$center &&
     `
 		justify-content: center;
 		align-items: center;

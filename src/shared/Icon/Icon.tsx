@@ -49,7 +49,7 @@ const Wrapper = styled.div<WrapperProps>`
   ${({ blink }) => blink && blinking};
   align-items: center;
   display: flex;
-  ${({ center }) => center && "justify-content: center;"};
+  ${({ $center }) => $center && "justify-content: center;"};
 `;
 
 const I = styled.i<IProps>`
@@ -102,7 +102,7 @@ export const Icon = ({
   color,
   hoverColor,
   withStates,
-  center = true,
+  $center = true,
   spin = false,
   blink = false,
   className,
@@ -111,7 +111,7 @@ export const Icon = ({
   ...rest
 }: IconProps) => (
   <Wrapper
-    center={center}
+    $center={$center}
     spin={spin || ["loop", "sync"].indexOf(src) !== -1}
     blink={blink}
     className={className}
@@ -126,7 +126,7 @@ export const Icon = ({
     )}
     {type === "material" && (
       <I
-        className={"material-symbols-outlined"}
+        className="material-icons"
         size={size}
         color={color}
         hoverColor={hoverColor}
