@@ -1,36 +1,43 @@
-import styled, { css } from "styled-components";
-import { Link as LinkOrigin } from "react-router";
-import { LinkProps } from "./interfaces";
+import React from "react";
+import styled from "styled-components";
+import { Link as RouterLink, LinkProps } from "react-router";
+interface CustomLinkProps extends LinkProps {
+  isActive?: boolean; // Prop to indicate active state
+}
 
-const common = css<LinkProps>`
-  ${({ underlined }) =>
-    `text-decoration: ${underlined ? "underline" : "none"};`}
-  color: ${({ color }) => color || "white"};
-  font-size: ${({ size }) => size || "1rem"};
-`;
+// Styled Link Component
+const StyledLink = styled(RouterLink)<{ isActive?: boolean }>`
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  text-decoration: none;
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.colors.richBrown : "transparent"};
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
 
-// Use `styled` typing to ensure compatibility with HTML props
-const InternalLink = styled.span<LinkProps>`
-  > a {
-    ${common};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.hoverBrown};
+    color: ${({ theme }) => theme.colors.goldAccent};
+    cursor: pointer;
+  }
+
+  /* Optional: Add an icon next to the link text */
+  i {
+    margin-right: ${({ theme }) => theme.spaces8[1]};
+    color: ${({ theme }) => theme.colors.goldAccent};
   }
 `;
 
-const ExternalLink = styled.a<LinkProps>`
-  ${common};
-`;
-
-export const Link = ({ children, ...props }: LinkProps) =>
-  props.to ? (
-    <InternalLink
-      underlined={props.underlined}
-      color={props.color}
-      size={props.size}
-    >
-      <LinkOrigin to={props.to} className={props.className}>
-        {children}
-      </LinkOrigin>
-    </InternalLink>
-  ) : (
-    <ExternalLink {...props}>{children}</ExternalLink>
+// The Link Component
+export const Link: React.FC<CustomLinkProps> = ({
+  children,
+  isActive = false,
+  ...rest
+}) => {
+  return (
+    <StyledLink isActive={isActive} {...rest}>
+      {children}
+    </StyledLink>
   );
+};

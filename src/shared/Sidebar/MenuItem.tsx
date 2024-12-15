@@ -10,9 +10,6 @@ const Wrapper = styled(Flexbox)`
   border-bottom: 1px solid ${({ theme }) => theme.colors};
   box-sizing: border-box;
   border-radius: 4px;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.blue6};
-  }
 `;
 
 interface MenuItem {

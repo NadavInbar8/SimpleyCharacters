@@ -5,6 +5,7 @@ import { MenuItem } from "./MenuItem";
 const Wrapper = styled(Flexbox)`
   width: 100%;
   box-sizing: border-box;
+  gap: ${({ theme }) => theme.spaces8[2]};
 `;
 
 export const MainMenu = () => {

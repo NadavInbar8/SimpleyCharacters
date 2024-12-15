@@ -11,7 +11,7 @@ const Wrapper = styled.button.attrs((props) => ({
   align-items: center;
   border-radius: 4px;
   border-width: 0;
-  color: white;
+  color: ${({ theme }) => theme.colors.parchmentLight};
   display: flex;
   font-family: ${({ theme }) => theme.fonts.family};
   font-size: ${({ theme }) => theme.fonts.normal};
@@ -50,22 +50,22 @@ const Wrapper = styled.button.attrs((props) => ({
     }
   }}
 
-  ${({ type, theme, active }) => {
+  ${({ type, theme }) => {
     switch (type) {
       case BUTTON_TYPES.secondary:
         return `
-          border: solid 1px ${theme.colors.primaryBlue};
+          border: solid 1px ${theme.colors.goldAccent};
           background-color: transparent;
-          color: ${theme.colors.primaryBlue};
+          color: ${theme.colors.goldAccent};
           &:hover {
-            background-color: ${theme.colors.blue4}
+            background-color: ${theme.colors.goldHover}
           };
           &:active {
-            background-color: ${theme.colors.blue3};
+            background-color: ${theme.colors.goldActive};
           };
          &:disabled{
-            color: ${theme.colors.grey2};
-            border: 1px solid ${theme.colors.grey2};
+            color: ${theme.colors.greyMuted};
+            border: 1px solid ${theme.colors.greyMuted};
             cursor: default;
             &:hover{
               background-color: transparent;
@@ -73,46 +73,40 @@ const Wrapper = styled.button.attrs((props) => ({
           }
         `;
       case BUTTON_TYPES.tertiary:
-        return active
-          ? `
-            border: none;
-            background-color: ${theme.colors.blue4};
-            color: ${theme.colors.primaryBlue};
-            padding: 4px ${theme.spaces8[1]};
-        `
-          : `
-             border: none;
-            border-radius: unset;
-            background-color: transparent;
-            color: ${theme.colors.primaryBlue};
-            &:hover {
-              color: ${theme.colors.blue2};
-            }
-            &:active {
-              color: ${theme.colors.blue3};
-            }
-            &:disabled {
-              cursor: default;
-              color: ${theme.colors.grey2};
-              ${Icon} {
-                opacity: 0.5;
-              };
-            }
-          `;
+        return `
+          background-color: transparent;
+          border: none;
+          color: ${theme.colors.textPrimary};
+          &:hover {
+            color: ${theme.colors.goldAccent};
+          }
+          &:active {
+            color: ${theme.colors.goldActive};
+          }
+          &:disabled {
+            color: ${theme.colors.greyMuted};
+            cursor: default;
+            color: ${theme.colors.grey2};
+            ${Icon} {
+              opacity: 0.5;
+            };
+          }
+        `;
       case BUTTON_TYPES.primary:
       default:
         return `
-          background-color: ${theme.colors.primaryBlue};
+          background-color: ${theme.colors.richBrown};
+          color: ${theme.colors.parchmentLight};
           &:hover {
-            background-color: ${theme.colors.blue2};
+            background-color: ${theme.colors.burnishedGold};
           }
-          &:active {
-            background-color: ${theme.colors.blue3};
+           &:active {
+            background-color: ${theme.colors.goldActive};
           }
-          &:disabled {
-            color: ${theme.colors.grey2};
-            background-color: unset;
-            background-color: ${theme.colors.grey4};
+           &:disabled {
+            color: ${theme.colors.greyMuted};
+            background-color: ${theme.colors.greyLight};
+            cursor: default;
           }
         `;
     }

@@ -7,7 +7,7 @@ import { SectionTitle } from "../Titles/Titles";
 
 const Wrapper = styled(Flexbox)`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.blue5};
+  background-color: ${({ theme }) => theme.colors.richBrown};
   max-height: ${({ theme }) => theme.spaces8[3]};
   padding: ${({ theme }) => theme.spaces8[2]} ${({ theme }) => theme.spaces8[4]};
   position: relative;
