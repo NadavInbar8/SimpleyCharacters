@@ -13,7 +13,7 @@ interface WrapperProps {
 }
 
 const Wrapper = styled(Flexbox)<WrapperProps>`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.textPrimary};
   ${({ noBackground, theme }) =>
     !noBackground &&
     `
@@ -23,11 +23,15 @@ const Wrapper = styled(Flexbox)<WrapperProps>`
     background-color: ${theme.colors.blue5};
   `};
   flex: ${({ col }) => col};
+  background-color: ${({ theme }) =>
+    theme.colors.cardBackground}; /* Darker parchment */
+  border: 1px solid ${({ theme }) => theme.colors.borderDark}; /* Darker border for contrast */
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow for lift */
   overflow: hidden;
   position: relative;
-
-  ${({ noPadding, theme }) => !noPadding && `padding: ${theme.spaces8[2]};`}
-  ${({ noMargin, theme }) => !noMargin && `margin: ${theme.spaces8[2]};`}
+  padding: ${({ noPadding, theme }) => (noPadding ? "0" : theme.spaces8[2])};
+  margin: ${({ noMargin, theme }) => (noMargin ? "0" : theme.spaces8[2])};
 `;
 
 export const Card: React.FC<CardProps> = ({

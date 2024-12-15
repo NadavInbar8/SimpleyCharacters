@@ -5,7 +5,7 @@ import { Flexbox, Sidebar } from "../shared";
 import { LayoutProps } from "./interface.ts";
 
 const Wrapper = styled.div`
-  background-color: ${({ theme }) => theme.colors.blue6};
+  background-color: ${({ theme }) => theme.colors.parchment};
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
