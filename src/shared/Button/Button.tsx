@@ -50,7 +50,7 @@ const Wrapper = styled.button.attrs((props) => ({
     }
   }}
 
-  ${({ type, theme, active }) => {
+  ${({ type, theme }) => {
     switch (type) {
       case BUTTON_TYPES.secondary:
         return `
