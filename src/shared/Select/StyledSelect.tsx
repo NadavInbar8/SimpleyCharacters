@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Controller, Control } from "react-hook-form";
+import { Controller, Control, UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
 import { Error } from "../Typography/Typography";
 import { Scrollbars } from "../Scrollable/Scrollbars";
@@ -8,8 +8,8 @@ import { InteractivePlaceholder } from "../InteractivePlaceholder";
 
 // Define the option type
 export interface Option {
-  label: string;
-  value: string;
+  label: string | number;
+  value: any;
 }
 
 // Define props for the Select component
@@ -23,6 +23,7 @@ interface SelectProps {
   filled?: boolean;
   focused?: boolean;
   interactivePlaceholder?: string;
+  register?: UseFormRegisterReturn;
 }
 
 interface ExtendedSelectProps extends ReactSelectProps<Option, false> {
@@ -42,17 +43,19 @@ const BaseStyledSelect = styled(Select).attrs<ExtendedSelectProps>(() => ({
   }
 
   .react-select__menu {
-    background: ${({ theme }) => theme.colors.grey4};
+    background: ${({ theme }) => theme.colors.parchment};
     z-index: 2;
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.textPrimary};
     z-index: 5;
+
+    ${Scrollbars}
 
     div {
       div {
         padding: 15px 15px;
 
         :hover {
-          background: ${({ theme }) => theme.colors.grey3};
+          background: ${({ theme }) => theme.colors.parchmentLight};
           cursor: pointer;
         }
       }
@@ -60,18 +63,23 @@ const BaseStyledSelect = styled(Select).attrs<ExtendedSelectProps>(() => ({
   }
 
   .react-select__option {
+    color: ${({ theme }) => theme.colors.richBrown};
     &:hover {
-      background: ${({ theme }) => theme.colors.blue3};
+      background: ${({ theme }) => theme.colors.goldActive};
+      color: ${({ theme }) => theme.colors.parchment};
+
       cursor: pointer;
     }
   }
 
   .react-select__option--is-focused {
-    background: ${({ theme }) => theme.colors.grey4};
+    background: ${({ theme }) => theme.colors.goldActive};
+    color: ${({ theme }) => theme.colors.parchment};
   }
 
   .react-select__option--is-selected {
-    background: ${({ theme }) => theme.colors.primaryBlue};
+    background: ${({ theme }) => theme.colors.goldActive};
+    color: ${({ theme }) => theme.colors.parchment};
   }
 
   .react-select__single-value {
@@ -84,7 +92,7 @@ const BaseStyledSelect = styled(Select).attrs<ExtendedSelectProps>(() => ({
   .react-select__control {
     background-color: transparent;
     border: none;
-    border-bottom: 2px solid ${({ theme }) => theme.colors.grey1};
+    border-bottom: 2px solid ${({ theme }) => theme.colors.borderDark};
     border-radius: 0;
     box-shadow: none;
     cursor: pointer;
@@ -92,28 +100,32 @@ const BaseStyledSelect = styled(Select).attrs<ExtendedSelectProps>(() => ({
     min-height: 39px;
     transition: all 0.2s ease-in-out;
 
+    &:hover {
+      border-color: ${({ theme }) => theme.colors.goldAccent};
+    }
+
     ${({ filled, theme }) =>
       filled &&
       `
-      border-bottom: 2px solid ${theme.colors.grey1};
+      border-bottom: 2px solid ${theme.colors.borderDark};
     `}
 
     ${({ focused, theme }) =>
       focused &&
       `
-      border-bottom: 2px solid ${theme.colors.primaryBlue};
+      border-bottom: 2px solid ${theme.colors.goldAccent};
     `}
 
     div {
-      color: ${({ theme }) => theme.colors.white};
+      color: ${({ theme }) => theme.colors.textPrimary};
     }
 
     :hover {
-      border-color: ${({ theme }) => theme.colors.primaryBlue};
+      border-color: ${({ theme }) => theme.colors.goldAccent};
     }
 
     :focus {
-      border-bottom: 2px solid ${({ theme }) => theme.colors.primaryBlue};
+      border-bottom: 2px solid ${({ theme }) => theme.colors.goldAccent};
     }
   }
 
@@ -137,6 +149,10 @@ const BaseStyledSelect = styled(Select).attrs<ExtendedSelectProps>(() => ({
 `;
 const Wrapper = styled.div`
   margin-bottom: 1rem;
+  position: relative;
+  margin-top: ${({ theme }) => theme.spaces8[1]};
+  min-width: 100px;
+  padding-bottom: ${({ theme }) => theme.spaces8[3]};
 `;
 
 // Main StyledSelect Component
@@ -177,7 +193,7 @@ const StyledSelect: React.FC<SelectProps> = ({
           <BaseStyledSelect
             {...field}
             options={options}
-            placeholder={placeholder}
+            placeholder={!interactivePlaceholder && placeholder}
             filled={filled}
             focused={focused}
             isDisabled={disabled}

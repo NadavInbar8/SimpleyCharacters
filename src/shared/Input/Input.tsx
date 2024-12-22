@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { Flexbox } from "../Flexbox/Flexbox";
 import { Error } from "../Typography/Typography";
+import { InteractivePlaceholder } from "../InteractivePlaceholder";
 
 // Type definitions for Input props
 interface InputProps {
@@ -17,6 +18,7 @@ interface InputProps {
   withoutErrorPadding?: boolean;
   flex?: boolean;
   value?: string;
+  interactivePlaceholder?: string;
 }
 
 const Wrapper = styled(Flexbox)<{
@@ -120,6 +122,7 @@ export const Input: React.FC<InputProps> = ({
   textField = false,
   withoutErrorPadding = false,
   flex = false,
+  interactivePlaceholder,
   ...rest
 }) => (
   <Wrapper
@@ -129,6 +132,15 @@ export const Input: React.FC<InputProps> = ({
     withoutErrorPadding={withoutErrorPadding}
   >
     {label && <label htmlFor={name}>{label}</label>}
+    {interactivePlaceholder && (
+      <InteractivePlaceholder
+        shouldBeLabel={!!label}
+        htmlFor={name}
+        focused={focus}
+      >
+        {interactivePlaceholder}
+      </InteractivePlaceholder>
+    )}
     <InputStyle
       id={name}
       placeholder={placeholder}

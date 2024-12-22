@@ -11,12 +11,12 @@ const FullWidth = styled(Flexbox)`
   flex: 1;
   margin-bottom: ${({ theme }) => theme.spaces8[3]};
   overflow: hidden;
+  width: 100%;
 `;
 
-export type Inputs = {
-  example: string;
-  exampleRequired: string;
-};
+const Form = styled.form`
+  width: 100%;
+`;
 
 export const Wizard: React.FC = () => {
   const { currentStep, title, setTitle } = useWizard();
@@ -26,34 +26,25 @@ export const Wizard: React.FC = () => {
     [stepInfo]
   );
 
-  const methods = useForm<Inputs>({
-    mode: "onBlur",
-    defaultValues: {
-      example: "",
-      exampleRequired: "",
-    },
-  });
+  const methods = useForm();
 
   const {
     handleSubmit,
     formState: { errors },
-    trigger,
-  } = methods;
-
-  // Trigger validation on mount
-  useEffect(() => {
-    trigger();
-  }, [trigger]);
+    getValues,
+  } = useForm();
+  const values = getValues();
+  console.log(">>>> values", values);
 
   useEffect(() => {
     setTitle(stepInfo.title);
   }, [currentStep]);
 
-  const onSubmit = (data: Inputs) => {
+  const onSubmit = (data: any) => {
     console.log(">>>", data);
   };
 
-  const disableContinue = Object.keys(errors).length > 0;
+  const disableContinue = Object.keys(errors).length > 0 || !values;
 
   return (
     <PageContainer>
@@ -61,9 +52,9 @@ export const Wizard: React.FC = () => {
       <Card>
         <FullWidth>
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <CurrentStepComponent />
-            </form>
+            </Form>
           </FormProvider>
         </FullWidth>
         <WizardButtons

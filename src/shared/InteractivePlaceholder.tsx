@@ -11,12 +11,13 @@ const Placeholder = styled.label<PlaceholderProps>`
   left: 1px;
   pointer-events: none;
   position: absolute;
-  top: 26px;
-  ${({ shouldBeLabel }) =>
+  top: 8px;
+  ${({ shouldBeLabel, theme }) =>
     shouldBeLabel &&
     `
     left: 0px;
-    top: 0px;
+    top: -8px;
+    color: ${theme.colors.goldAccent};
   `};
   ${({ shouldShow }) =>
     !shouldShow &&
