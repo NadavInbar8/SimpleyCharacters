@@ -83,7 +83,6 @@ export const NewCharacter: React.FC = ({}) => {
 
   const handleInvalidFile = (file: File) => {
     console.log(">>>> invalid file:", file);
-    throw Error();
   };
 
   return (
