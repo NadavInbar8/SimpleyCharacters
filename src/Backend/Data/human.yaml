@@ -1,0 +1,17 @@
+Inherits: []
+Tags:
+    - Race
+Components:
+  Race:
+    Name: Human
+    Speed: 30
+    Darkvision: 0
+    ASIModifiers:
+      STR: 1
+      DEX: 1
+      CON: 1
+      INT: 1
+      WIS: 1
+      CHA: 1
+    Traits:
+      - Versatile

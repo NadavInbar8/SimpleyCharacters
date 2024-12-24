@@ -1,0 +1,22 @@
+Inherits: []
+Tags:
+    - Class
+Components:
+  Class:
+    Name: Fighter
+    HitDie: d10
+    Proficiencies:
+      - LightArmor
+      - MediumArmor
+      - Shields
+      - SimpleWeapons
+      - MartialWeapons
+    HasSpellcasting: false
+    LevelUpFeatures:
+      "1":
+        - Fighting Style
+        - Second Wind
+      "2":
+        - Action Surge
+      "3":
+        - Martial Archetype
