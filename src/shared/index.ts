@@ -12,3 +12,4 @@ export {
   SubSectionTitle,
 } from "./Titles/Titles";
 export { Link } from "./Link/Link";
+export { Checkbox } from "./Checkbox/Checkbox";
