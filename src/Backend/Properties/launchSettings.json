@@ -1,0 +1,23 @@
+{
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:8081"
+    },
+    "Container (.NET SDK)": {
+      "commandName": "SdkContainer",
+      "applicationUrl": "https://localhost:8081",
+      "environmentVariables": {
+        "ASPNETCORE_HTTPS_PORTS": "8081"
+      },
+      "publishAllPorts": false,
+      "useSSL": true,
+      "containerName": "SimpleyCharacters"
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
+}
