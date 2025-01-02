@@ -1,0 +1,12 @@
+Id: elf
+Inherits: []
+Components:
+  Race:
+    Name: Elf
+    Speed: 30
+    Darkvision: 60
+    ASIModifiers:
+      DEX: 2
+    Traits:
+      - Keen Senses
+      - Fey Ancestry

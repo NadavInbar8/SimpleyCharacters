@@ -1,0 +1,15 @@
+Id: base_character
+Inherits: []
+Components:
+  Attributes:
+    Strength: 10
+    Dexterity: 10
+    Constitution: 10
+    Intelligence: 10
+    Wisdom: 10
+    Charisma: 10
+  Inventory:
+    Items: []
+    Gold: 0
+  Conditions:
+    ActiveConditions: []

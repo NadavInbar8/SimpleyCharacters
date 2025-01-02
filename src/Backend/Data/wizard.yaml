@@ -1,0 +1,15 @@
+Id: wizard
+Inherits: []
+Components:
+  Class:
+    Name: Wizard
+    HitDie: d6
+    Proficiencies:
+      - Daggers
+      - Quarterstaffs
+    HasSpellcasting: true
+    LevelUpFeatures:
+      "1":
+        - Arcane Recovery
+      "2":
+        - Arcane Tradition
