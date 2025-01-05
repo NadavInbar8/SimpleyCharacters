@@ -4,8 +4,9 @@ import { WizardProviderProps, WizardState } from "./interfaces";
 const WizardContext = createContext<WizardState | undefined>(undefined);
 
 export const WizardProvider: React.FC<WizardProviderProps> = ({ children }) => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<string>("newCharacter");
   const [title, setTitle] = useState<string>("Some Default Title");
+
   const value = useMemo(
     () => ({
       currentStep,

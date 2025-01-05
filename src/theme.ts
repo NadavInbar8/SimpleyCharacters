@@ -46,28 +46,6 @@ export const theme = {
     orange: "#FF9700",
     orange2: "#534342",
     orange3: "#483E47",
-    primaryBlue: "#3f8dff",
-    blue2: "#0068FF",
-    blue3: "#274380",
-    blue4: "#2d3768",
-    blue5: "#24294A",
-    blue6: "#1C234A",
-    blue7: "#070e34",
-    blue8: "#3B436D",
-    grey1: "#7d8093",
-    grey2: "#5a607c",
-    grey3: "#373f67",
-    grey4: "#31385B",
-    primaryButtonGradient:
-      "linear-gradient(209deg, #0351C9 -132.19%, #3F8DFF 100%)",
-    primaryButtonGradientLight:
-      "linear-gradient(180deg, #498BEE 0%, #5597F9 100%)",
-    primaryButtonGradientDark:
-      "linear-gradient(180deg, #205EBB 0%, #2D6AC6 100%)",
-    activeBlueGradient:
-      "linear-gradient(to left, rgba(3, 81, 201, 0), #3984f3)",
-    skeletonGradient:
-      "linear-gradient(to right, rgba(255, 255, 255, 0.2) 15%, rgba(255, 255, 255, 0.05) 125%)",
     parchment: "#FAF3E0", // Light parchment (text)
     parchmentLight: "#F5E9D8", // Slightly lighter parchment
     richBrown: "#91684A", // Rich brown for active links

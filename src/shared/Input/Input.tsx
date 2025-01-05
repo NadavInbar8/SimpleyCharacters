@@ -1,156 +1,77 @@
+// TextInput.tsx
 import React from "react";
 import styled from "styled-components";
-import { UseFormRegisterReturn } from "react-hook-form";
-import { Flexbox } from "../Flexbox/Flexbox";
-import { Error } from "../Typography/Typography";
-import { InteractivePlaceholder } from "../InteractivePlaceholder";
 
-// Type definitions for Input props
-interface InputProps {
-  name: string;
+interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  placeholder?: string;
-  type?: string;
-  register?: UseFormRegisterReturn;
+  name: string;
+  register?: (name: string, options?: any) => any;
+  validation?: Record<string, any>;
   error?: any;
-  disabled?: boolean;
-  textField?: boolean;
-  withoutErrorPadding?: boolean;
-  flex?: boolean;
-  value?: string;
-  interactivePlaceholder?: string;
 }
 
-const Wrapper = styled(Flexbox)<{
-  textField?: boolean;
-  withoutErrorPadding?: boolean;
-  flex?: boolean;
-}>`
-  padding-bottom: ${({ theme }) => theme.spaces8[3]};
-  position: relative;
-  ${({ textField }) =>
-    textField &&
-    `
-    padding-top: 17px;
-  `};
-  ${({ withoutErrorPadding }) =>
-    withoutErrorPadding &&
-    `
-    padding: unset;
-  `};
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spaces8[1]};
 `;
 
-export const InputStyle = styled.input<{
-  invalidBorder?: boolean;
-  filled?: boolean;
-}>`
-  background: transparent;
+const StyledInput = styled.input`
+  width: 100%;
+  padding: ${({ theme }) => `${theme.spaces8[1]} ${theme.spaces8[2]}`};
+  font-size: ${({ theme }) => theme.fonts.normal};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  background-color: ${({ theme }) => theme.colors.cardBackground};
   border: none;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.grey1};
-  color: white;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.borderDark};
+  outline: none;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.borderAccent};
+    background-color: ${({ theme }) => theme.colors.parchmentLight};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.greyLight};
+    color: ${({ theme }) => theme.colors.greyMuted};
+    border-color: ${({ theme }) => theme.colors.greyMuted};
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.greyMuted};
+  }
+`;
+
+const Label = styled.label`
   font-family: ${({ theme }) => theme.fonts.family};
   font-size: ${({ theme }) => theme.fonts.normal};
-  outline: none;
-  padding: 10px 0 10px 1px;
-  position: relative;
-  transition: all 0.2s ease-in-out;
-  width: 100%;
-
-  &:hover {
-    ${({ invalidBorder, theme }) =>
-      !invalidBorder && `border-bottom: 2px solid ${theme.colors.primaryBlue}`};
-  }
-
-  :focus {
-    border-bottom: ${({ invalidBorder, theme }) =>
-      invalidBorder
-        ? `2px solid ${theme.colors.error}`
-        : `2px solid ${theme.colors.primaryBlue}`};
-  }
-
-  ::-webkit-input-placeholder {
-    color: ${({ theme }) => theme.colors.disabledLight};
-  }
-  ::-moz-placeholder {
-    color: ${({ theme }) => theme.colors.disabledLight};
-  }
-  :-ms-input-placeholder {
-    color: ${({ theme }) => theme.colors.disabledLight};
-  }
-  :-moz-placeholder {
-    color: ${({ theme }) => theme.colors.disabledLight};
-  }
-
-  ${({ invalidBorder, theme }) =>
-    invalidBorder &&
-    `
-    border-bottom: 2px solid ${theme.colors.error};
-  `};
-
-  :disabled {
-    color: ${({ theme }) => theme.colors.disabledLight};
-  }
-
-  :read-only {
-    border-bottom: 2px solid ${({ theme }) => theme.colors.grey1};
-    ${({ filled, theme }) =>
-      filled &&
-      `
-      border-bottom: 2px solid ${theme.colors.primaryBlue};
-    `};
-  }
-
-  :-webkit-autofill,
-  :-webkit-autofill:focus,
-  :-webkit-autofill:active,
-  :-webkit-autofill:hover {
-    -webkit-text-fill-color: ${({ theme }) => theme.colors.white};
-    box-shadow: 0 0 0 1000px transparent inset;
-    transition: background-color 5000s ease-in-out 0s;
-  }
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
-export const Input: React.FC<InputProps> = ({
-  name,
+const ErrorMessage = styled.span`
+  font-family: ${({ theme }) => theme.fonts.family};
+  font-size: ${({ theme }) => theme.fonts.small};
+  color: ${({ theme }) => theme.colors.error};
+`;
+
+export const Input: React.FC<TextInputProps> = ({
   label,
-  placeholder,
-  type = "text",
+  name,
   register,
+  validation,
   error,
-  value,
-  disabled = false,
-  textField = false,
-  withoutErrorPadding = false,
-  flex = false,
-  interactivePlaceholder,
-  ...rest
-}) => (
-  <Wrapper
-    column
-    flex={flex}
-    textField={textField}
-    withoutErrorPadding={withoutErrorPadding}
-  >
-    {label && <label htmlFor={name}>{label}</label>}
-    {interactivePlaceholder && (
-      <InteractivePlaceholder
-        shouldBeLabel={!!label}
-        htmlFor={name}
-        focused={focus}
-      >
-        {interactivePlaceholder}
-      </InteractivePlaceholder>
-    )}
-    <InputStyle
-      id={name}
-      placeholder={placeholder}
-      type={type}
-      invalidBorder={!!error}
-      disabled={disabled}
-      filled={!error && !!value}
-      {...register}
-      {...rest}
-    />
-    {error && <Error>{error}</Error>}
-  </Wrapper>
-);
+  ...props
+}) => {
+  return (
+    <InputContainer>
+      {label && <Label htmlFor={name}>{label}</Label>}
+      <StyledInput
+        id={name}
+        {...props}
+        {...(register ? register(name, validation) : {})}
+      />
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+    </InputContainer>
+  );
+};

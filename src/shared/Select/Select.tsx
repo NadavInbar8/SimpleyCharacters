@@ -1,121 +1,68 @@
-// import React, { useCallback, useState } from "react";
-// import styled from "styled-components";
-// import { Controller, FieldError, Control, FieldValues } from "react-hook-form";
-// import { Flexbox } from "../Flexbox/Flexbox";
-// import { InteractivePlaceholder as InteractivePlaceholderOrigin } from "../InteractivePlaceholder";
-// import { Error } from "../Typography/Typography";
-// import { StyledSelect } from "./StyledSelect";
+import React from "react";
+import ReactSelect, { Props as ReactSelectProps } from "react-select";
+import styled from "styled-components";
 
-// // Styled Components
-// const Wrapper = styled(Flexbox)<{
-//   interactivePlaceholder?: boolean;
-//   hasLabel: boolean;
-// }>`
-//   height: unset;
-//   padding-bottom: 14px;
-//   position: relative;
+interface SelectInputProps extends ReactSelectProps {
+  name: string;
+  label?: string;
+  register?: (name: string) => any; // react-hook-form's register function
+  error?: any;
+  control: any; // react-hook-form's control object
+  validation?: Record<string, any>;
+}
 
-//   ${({ interactivePlaceholder }) =>
-//     interactivePlaceholder &&
-//     `
-//     padding-top: 17px;
-//   `};
-// `;
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spaces8[1]}px;
+`;
 
-// const InteractivePlaceholder = styled(InteractivePlaceholderOrigin)<{
-//   focused: boolean;
-// }>`
-//   ${({ focused, theme }) =>
-//     focused &&
-//     `
-//     color: ${theme.colors.primaryBlue};
-//   `};
-// `;
+const StyledLabel = styled.label`
+  font-family: ${({ theme }) => theme.fonts.family};
+  font-size: ${({ theme }) => theme.fonts.normal};
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;
 
-// // Define Props for the Select Component
-// interface Option {
-//   label: string;
-//   value: string;
-// }
+const StyledError = styled.span`
+  font-family: ${({ theme }) => theme.fonts.family};
+  font-size: ${({ theme }) => theme.fonts.small};
+  color: ${({ theme }) => theme.colors.error};
+`;
 
-// interface SelectProps {
-//   name: string;
-//   control: Control<FieldValues>;
-//   options: Option[];
-//   hasLabel?: boolean;
-//   hasInitialValue?: boolean;
-//   interactivePlaceholder?: string;
-//   placeholder?: string;
-//   disabled?: boolean;
-//   error?: FieldError;
-//   isCreatable?: boolean;
-// }
+export const SelectInput: React.FC<SelectInputProps> = ({
+  name,
+  label,
+  register,
+  control,
+  error,
+  validation,
+  ...props
+}) => {
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      borderColor: error ? "red" : base.borderColor,
+      "&:hover": {
+        borderColor: error ? "red" : base.borderColor,
+      },
+    }),
+  };
 
-// // Main Select Component
-// export const Select: React.FC<SelectProps> = ({
-//   name,
-//   control,
-//   options,
-//   hasLabel = false,
-//   hasInitialValue,
-//   interactivePlaceholder,
-//   placeholder = "Select...",
-//   disabled,
-//   error,
-//   isCreatable,
-// }) => {
-//   const [shouldBeLabel, setShouldBeLabel] = useState(
-//     hasInitialValue !== undefined
-//   );
-//   const [focused, setFocused] = useState(false);
-
-//   const handleInputChange = useCallback(() => {
-//     if (!shouldBeLabel) setShouldBeLabel(true);
-//   }, [shouldBeLabel]);
-
-//   const handleFocus = useCallback(() => {
-//     if (!shouldBeLabel) setShouldBeLabel(true);
-//     setFocused(true);
-//   }, [shouldBeLabel]);
-
-//   return (
-//     <Wrapper
-//       column={true}
-//       hasLabel={hasLabel}
-//       interactivePlaceholder={!!interactivePlaceholder}
-//     >
-//       <InteractivePlaceholder
-//         shouldBeLabel={shouldBeLabel}
-//         focused={focused}
-//         htmlFor={name}
-//       >
-//         {interactivePlaceholder}
-//       </InteractivePlaceholder>
-//       <Controller
-//         name={name}
-//         control={control}
-//         render={({ field }) => (
-//           <StyledSelect
-//             {...field}
-//             options={options}
-//             isDisabled={disabled}
-//             value={field.value || (hasInitialValue ? hasInitialValue : null)}
-//             placeholder={interactivePlaceholder ? null : placeholder}
-//             onChange={(selected: { label: string; value: string } | null) => {
-//               field.onChange(selected);
-//               setFocused(false);
-//             }}
-//             onFocus={handleFocus}
-//             onBlur={() => {
-//               setShouldBeLabel(!!field.value);
-//               setFocused(false);
-//               field.onBlur();
-//             }}
-//             onInputChange={handleInputChange}
-//           />
-//         )}
-//       />
-//       {error && <Error>{error.message}</Error>}
-//     </Wrapper>
-//   );
-// };
+  return (
+    <SelectContainer>
+      {label && <StyledLabel htmlFor={name}>{label}</StyledLabel>}
+      <ReactSelect
+        {...props}
+        name={name}
+        id={name}
+        styles={customStyles}
+        instanceId={name} // Required for accessibility when using React Select
+      />
+      {error && (
+        <StyledError>
+          {typeof error === "string" ? error : error.message}
+        </StyledError>
+      )}
+    </SelectContainer>
+  );
+};

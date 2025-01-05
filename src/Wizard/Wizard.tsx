@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { Card, Flexbox, PageContainer, Titlebar } from "../shared";
 import { useForm, FormProvider } from "react-hook-form";
 import { WizardButtons } from "./WizardButtons";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useWizard } from "../shared/hooks/useWizard";
-import { STEPS } from "./constants";
+import { StepMap, STEPS, WizardFormValues } from "./constants";
 
 const FullWidth = styled(Flexbox)`
   align-items: start;
@@ -20,31 +20,54 @@ const Form = styled.form`
 
 export const Wizard: React.FC = () => {
   const { currentStep, title, setTitle } = useWizard();
-  const stepInfo = useMemo(() => STEPS[currentStep], [currentStep, STEPS]);
+  const stepInfo = useMemo(
+    () => STEPS[currentStep as keyof StepMap],
+    [currentStep]
+  );
   const CurrentStepComponent = useMemo(
     () => stepInfo && stepInfo.Component,
     [stepInfo]
   );
 
-  const methods = useForm();
-
+  const methods = useForm<WizardFormValues>({
+    defaultValues: {},
+    shouldUnregister: true,
+    mode: "onChange", // Trigger validations only on change
+  });
   const {
     handleSubmit,
-    formState: { errors },
-    getValues,
-  } = useForm();
-  const values = getValues();
-  console.log(">>>> values", values);
+    watch,
+    formState: { isValid },
+    reset,
+  } = methods;
+
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     setTitle(stepInfo.title);
   }, [currentStep]);
 
+  useEffect(() => {
+    reset({}, { keepValues: true });
+  }, [currentStep, reset]);
+
   const onSubmit = (data: any) => {
     console.log(">>>", data);
   };
 
-  const disableContinue = Object.keys(errors).length > 0 || !values;
+  const watchedValues = watch();
+  const allFieldsFilled = stepInfo.requiredFields.every((fieldName) => {
+    const value = watchedValues[fieldName];
+    return value !== undefined && value !== null && value !== "";
+  });
+
+  const disableContinue = !allFieldsFilled || (!isValid && hasInteracted);
+
+  const handleInteraction = () => {
+    if (!hasInteracted) {
+      setHasInteracted(true);
+    }
+  };
 
   return (
     <PageContainer>
@@ -52,7 +75,10 @@ export const Wizard: React.FC = () => {
       <Card>
         <FullWidth>
           <FormProvider {...methods}>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form
+              onSubmit={handleSubmit(onSubmit)}
+              onChange={handleInteraction}
+            >
               <CurrentStepComponent />
             </Form>
           </FormProvider>
@@ -61,9 +87,7 @@ export const Wizard: React.FC = () => {
           continueText="Continue"
           currentStep={2}
           loading={false}
-          onContinue={() => {
-            console.log("hello");
-          }}
+          onContinue={handleSubmit(onSubmit)}
           disableContinue={disableContinue}
         />
       </Card>

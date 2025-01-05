@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { Checkbox, Flexbox, SectionTitle, SubSectionTitle } from "../../shared";
+import {
+  Button,
+  Checkbox,
+  Flexbox,
+  SectionTitle,
+  SubSectionTitle,
+} from "../../shared";
 import styled from "styled-components";
 import { Dropzone } from "../../shared/Dropzone/Dropzone";
-import { Input } from "../../shared/Input/Input";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import StyledSelect, { Option } from "../../shared/Select/StyledSelect";
+import { Input } from "../../shared/Input/Input";
+import { WizardFormValues } from "../constants";
+import { SelectInput } from "../../shared/Select/Select";
 
 const Wrapper = styled.div`
   flex-direction: column;
@@ -21,7 +29,8 @@ const Section = styled(Flexbox)`
 `;
 
 const SubSection = styled(Flexbox)`
-  min-width: 100%;
+  width: 50%;
+  gap: ${({ theme }) => theme.spaces8[2]};
 `;
 
 const UploaderFieldWrapper = styled(Flexbox)`
@@ -56,14 +65,15 @@ const makeLevelOptions = () => {
 };
 
 export const NewCharacter: React.FC = ({}) => {
-  const { register, formState, watch, control } = useFormContext();
-
+  const { register, formState, control, trigger } = useFormContext();
+  const handleBlur = async (field: keyof WizardFormValues) => {
+    await trigger(field); // Trigger validation for the field
+  };
   const [file, setFile] = useState<{
     base64?: string | ArrayBuffer | null;
     preview?: string;
     name: string;
   } | null>(null);
-  const characterName = watch("characterName");
   const levelOptions = makeLevelOptions();
   const genderOptions: Option[] = [
     { label: "Male", value: "M" },
@@ -111,53 +121,31 @@ export const NewCharacter: React.FC = ({}) => {
           <SubSection column>
             <Input
               name="characterName"
-              label="Character Name:"
+              label="Character Name"
               placeholder="Enter your character name"
-              register={register<string>("characterName", {
+              register={register}
+              validation={{
                 required: "Character name is required",
                 maxLength: {
                   value: 20,
                   message: "Character name must be less than 20 characters",
                 },
-              })}
-              value={characterName}
-              error={formState?.errors?.characterName?.message}
+              }}
+              onBlur={() => handleBlur("characterName")}
+              error={formState.errors.characterName?.message}
             />
-            <StyledSelect
-              name="startingLevel"
-              control={control}
-              options={levelOptions}
-              filled={!!formState?.errors.startingLevel}
-              focused={false}
-              error={formState?.errors.startingLevel?.message}
-              interactivePlaceholder={"Starting Level"}
-              register={register<string>("startingLevel", {
-                required: "Must choose starting level",
-              })}
-            />
-            <StyledSelect
+            <Controller
               name="gender"
-              control={control}
-              options={genderOptions}
-              filled={!!formState?.errors.gender}
-              focused={false}
-              error={formState?.errors.gender?.message}
-              interactivePlaceholder={"Gender"}
-              register={register<string>("gender", {
-                required: "Must choose gender",
-              })}
-            />
-            <StyledSelect
-              name="abilitesGeneration"
-              control={control}
-              options={abilitiesGenerationOptions}
-              filled={!!formState?.errors.abilitesGeneration}
-              focused={false} // Adjust dynamically if needed
-              error={formState?.errors.abilitesGeneration?.message}
-              interactivePlaceholder={"Abilites Generation Option"}
-              register={register<string>("abilitesGeneration", {
-                required: "Must choose gender",
-              })}
+              rules={{ required: "Gender is required" }}
+              render={({ field }) => (
+                <SelectInput
+                  control={control}
+                  {...field}
+                  options={genderOptions}
+                  label="Gender"
+                  error={formState.errors.gender}
+                />
+              )}
             />
           </SubSection>
         </Flexbox>
@@ -169,10 +157,11 @@ export const NewCharacter: React.FC = ({}) => {
         </SubSectionTitle>
         <SubSection column>
           <Checkbox
-            label="Average Hit Points"
-            name={"averageHitPoints"}
-            control={control}
-            isRounded={true}
+            label="Accept Terms and Conditions"
+            name="terms"
+            register={register}
+            defaultChecked={false}
+            validation={{ required: "You must agree to the terms" }}
           />
         </SubSection>
       </Section>

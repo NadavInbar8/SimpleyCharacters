@@ -1,6 +1,6 @@
 export interface WizardState {
-  currentStep: number;
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  currentStep: string;
+  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
 }
