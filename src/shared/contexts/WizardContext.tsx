@@ -1,7 +1,7 @@
 import { createContext, useMemo, useState } from "react";
 import { WizardProviderProps, WizardState } from "./interfaces";
 
-const WizardContext = createContext<WizardState | undefined>(undefined);
+export const WizardContext = createContext<WizardState | undefined>(undefined);
 
 export const WizardProvider: React.FC<WizardProviderProps> = ({ children }) => {
   const [currentStep, setCurrentStep] = useState<string>("newCharacter");
@@ -21,5 +21,3 @@ export const WizardProvider: React.FC<WizardProviderProps> = ({ children }) => {
     <WizardContext.Provider value={value}>{children}</WizardContext.Provider>
   );
 };
-
-export default WizardContext;

@@ -14,17 +14,19 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spaces8[1]};
+  min-width: 200px;
+  min-height: ${({ theme }) => theme.spaces8[8]};
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
-  padding: ${({ theme }) => `${theme.spaces8[1]} ${theme.spaces8[2]}`};
+  box-sizing: border-box;
   font-size: ${({ theme }) => theme.fonts.normal};
   color: ${({ theme }) => theme.colors.textPrimary};
   background-color: ${({ theme }) => theme.colors.cardBackground};
   border: none;
   border-bottom: 2px solid ${({ theme }) => theme.colors.borderDark};
   outline: none;
+  min-height: ${({ theme }) => theme.spaces8[5]};
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.borderAccent};

@@ -12,7 +12,7 @@ export type Step1Fields = {
   startingLevel: string | number;
   abilitiesGeneration: string | number;
   gender: string;
-  terms: boolean;
+  level: boolean;
 };
 
 export type Step2Fields = {
@@ -33,7 +33,7 @@ export type WizardFormValues = Step1Fields & Step2Fields;
 const newCharacter: Step<Step1Fields> = {
   Component: NewCharacter,
   title: "New Character",
-  requiredFields: ["characterName", "gender", "terms"], // Valid keys of Step1Fields
+  requiredFields: ["characterName", "gender", "level", "abilitiesGeneration"], // Valid keys of Step1Fields
 };
 const abilities: Step<Step2Fields> = {
   Component: NewCharacter,

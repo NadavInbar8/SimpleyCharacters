@@ -54,7 +54,6 @@ export const theme = {
     textPrimary: "#2D2A26" /* Charcoal black for text */,
     borderDark: "#7A6A5A" /* Dark brown border for contrast */,
     borderAccent: "#B28445" /* Golden accent for decorative borders */,
-    burnishedGold: "#B28445" /* Hover for primary buttons */,
     goldAccent: "#B68E3A" /* Border/text for secondary buttons */,
     goldHover: "#4B3A2B" /* Hover for secondary buttons */,
     goldActive: "#6C5B4C" /* Active state */,

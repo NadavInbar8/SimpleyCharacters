@@ -1,20 +1,78 @@
 import React from "react";
-import ReactSelect, { Props as ReactSelectProps } from "react-select";
+import ReactSelect from "react-select";
 import styled from "styled-components";
-
-interface SelectInputProps extends ReactSelectProps {
-  name: string;
-  label?: string;
-  register?: (name: string) => any; // react-hook-form's register function
-  error?: any;
-  control: any; // react-hook-form's control object
-  validation?: Record<string, any>;
-}
+import { Scrollbars } from "../Scrollable/Scrollbars";
+import { SelectInputProps } from "./interfaces";
 
 const SelectContainer = styled.div`
+  position: relative;
+  min-width: 100px;
+  min-height: ${({ theme }) => theme.spaces8[8]};
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spaces8[1]}px;
+  gap: ${({ theme }) => theme.spaces8[1]};
+  min-width: 200px;
+
+  span {
+    display: none;
+  }
+  .react-select__menu {
+    background: ${({ theme }) => theme.colors.parchment};
+    z-index: 2;
+    color: ${({ theme }) => theme.colors.textPrimary};
+    z-index: 5;
+    ${Scrollbars}
+  }
+  .react-select__option {
+    color: ${({ theme }) => theme.colors.richBrown};
+    &:hover {
+      background: ${({ theme }) => theme.colors.richBrown};
+      color: ${({ theme }) => theme.colors.parchment};
+      cursor: pointer;
+    }
+  }
+  .react-select__option--is-focused {
+    background: ${({ theme }) => theme.colors.richBrown};
+    color: ${({ theme }) => theme.colors.parchment};
+  }
+  .react-select__option--is-selected {
+    background: ${({ theme }) => theme.colors.goldAccent};
+    color: ${({ theme }) => theme.colors.parchment};
+  }
+  .react-select__single-value {
+    box-sizing: unset;
+    margin: 0;
+    padding: 0px;
+  }
+  .react-select__control {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.borderDark};
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
+    display: flex;
+    min-height: ${({ theme }) => theme.spaces8[5]};
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      border-color: ${({ theme }) => theme.colors.goldAccent};
+    }
+    &:focus {
+      border-color: ${({ theme }) => theme.colors.goldAccent};
+    }
+  }
+  .react-select__placeholder {
+    opacity: 0.5;
+    padding-left: 1px;
+  }
+  .react-select__control--is-disabled div {
+    color: ${({ theme }) => theme.colors.disabledLight};
+  }
+  .react-select__menu-list {
+    ${Scrollbars};
+    padding: unset;
+  }
 `;
 
 const StyledLabel = styled.label`
@@ -38,16 +96,6 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   validation,
   ...props
 }) => {
-  const customStyles = {
-    control: (base: any) => ({
-      ...base,
-      borderColor: error ? "red" : base.borderColor,
-      "&:hover": {
-        borderColor: error ? "red" : base.borderColor,
-      },
-    }),
-  };
-
   return (
     <SelectContainer>
       {label && <StyledLabel htmlFor={name}>{label}</StyledLabel>}
@@ -55,8 +103,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         {...props}
         name={name}
         id={name}
-        styles={customStyles}
-        instanceId={name} // Required for accessibility when using React Select
+        classNamePrefix="react-select"
+        instanceId={name}
       />
       {error && (
         <StyledError>

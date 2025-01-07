@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { WizardState } from "../contexts/interfaces";
-import WizardContext from "../contexts/WizardContext";
+import { WizardContext } from "../contexts";
 
 export const useWizard = (): WizardState => {
   const context = useContext(WizardContext);

@@ -1,18 +1,17 @@
 import { useState } from "react";
 import {
-  Button,
   Checkbox,
   Flexbox,
+  Option,
   SectionTitle,
   SubSectionTitle,
+  SelectInput,
+  Dropzone,
+  Input,
 } from "../../shared";
 import styled from "styled-components";
-import { Dropzone } from "../../shared/Dropzone/Dropzone";
 import { Controller, useFormContext } from "react-hook-form";
-import StyledSelect, { Option } from "../../shared/Select/StyledSelect";
-import { Input } from "../../shared/Input/Input";
 import { WizardFormValues } from "../constants";
-import { SelectInput } from "../../shared/Select/Select";
 
 const Wrapper = styled.div`
   flex-direction: column;
@@ -20,6 +19,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   min-width: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const Section = styled(Flexbox)`
@@ -98,57 +99,81 @@ export const NewCharacter: React.FC = ({}) => {
   return (
     <Wrapper>
       <Section>
-        <Flexbox gridGap="16px">
-          <PreviewContainer>
-            {file ? (
-              file.preview && <img src={file.preview} alt={file.name} />
-            ) : (
-              <UploaderFieldWrapper>
-                <Dropzone
-                  onDropAccepted={handleFilesAccepted}
-                  onUploadInvalidFile={handleInvalidFile}
-                  accept={{ "image/*": [] }}
-                  multiple={false}
-                  maxSize={MAX_SIZE}
-                >
-                  <p style={{ opacity: 0.2 }}>
-                    Drag 'n' drop an image here, or click to select one
-                  </p>
-                </Dropzone>
-              </UploaderFieldWrapper>
-            )}
-          </PreviewContainer>
-          <SubSection column>
-            <Input
-              name="characterName"
-              label="Character Name"
-              placeholder="Enter your character name"
-              register={register}
-              validation={{
-                required: "Character name is required",
-                maxLength: {
-                  value: 20,
-                  message: "Character name must be less than 20 characters",
-                },
-              }}
-              onBlur={() => handleBlur("characterName")}
-              error={formState.errors.characterName?.message}
+        <PreviewContainer>
+          {file ? (
+            file.preview && <img src={file.preview} alt={file.name} />
+          ) : (
+            <UploaderFieldWrapper>
+              <Dropzone
+                onDropAccepted={handleFilesAccepted}
+                onUploadInvalidFile={handleInvalidFile}
+                accept={{ "image/*": [] }}
+                multiple={false}
+                maxSize={MAX_SIZE}
+              >
+                <p style={{ opacity: 0.2 }}>
+                  Drag 'n' drop an image here, or click to select one
+                </p>
+              </Dropzone>
+            </UploaderFieldWrapper>
+          )}
+        </PreviewContainer>
+      </Section>
+      <Section>
+        <Input
+          name="characterName"
+          label="Character Name"
+          placeholder="Enter your character name"
+          register={register}
+          validation={{
+            required: "Character name is required",
+            maxLength: {
+              value: 20,
+              message: "Character name must be less than 20 characters",
+            },
+          }}
+          onBlur={() => handleBlur("characterName")}
+          error={formState.errors.characterName?.message}
+        />
+        <Controller
+          name="gender"
+          rules={{ required: "Gender is required" }}
+          render={({ field }) => (
+            <SelectInput
+              control={control}
+              {...field}
+              options={genderOptions}
+              label="Gender"
+              error={formState.errors.gender}
             />
-            <Controller
-              name="gender"
-              rules={{ required: "Gender is required" }}
-              render={({ field }) => (
-                <SelectInput
-                  control={control}
-                  {...field}
-                  options={genderOptions}
-                  label="Gender"
-                  error={formState.errors.gender}
-                />
-              )}
+          )}
+        />
+        <Controller
+          name="level"
+          rules={{ required: "Level is required" }}
+          render={({ field }) => (
+            <SelectInput
+              control={control}
+              {...field}
+              options={levelOptions}
+              label="Level"
+              error={formState.errors.gender}
             />
-          </SubSection>
-        </Flexbox>
+          )}
+        />
+        <Controller
+          name="abilitiesGeneration"
+          rules={{ required: "Must pick abilities generation option" }}
+          render={({ field }) => (
+            <SelectInput
+              control={control}
+              {...field}
+              options={abilitiesGenerationOptions}
+              label="Abilities Generation Option"
+              error={formState.errors.gender}
+            />
+          )}
+        />
       </Section>
       <Section column>
         <SectionTitle>Character Options</SectionTitle>
@@ -157,11 +182,40 @@ export const NewCharacter: React.FC = ({}) => {
         </SubSectionTitle>
         <SubSection column>
           <Checkbox
-            label="Accept Terms and Conditions"
-            name="terms"
+            label="Average hit points"
+            name="averageHitPoints"
             register={register}
             defaultChecked={false}
-            validation={{ required: "You must agree to the terms" }}
+          />
+          <Checkbox
+            label="Feats"
+            name="feats"
+            register={register}
+            defaultChecked={false}
+          />
+          <Checkbox
+            label="Multiclassing"
+            name="multiclassing"
+            register={register}
+            defaultChecked={false}
+          />
+          <Checkbox
+            label="Battlerager"
+            name="battlerager"
+            register={register}
+            defaultChecked={false}
+          />
+          <Checkbox
+            label="Bladesinger"
+            name="bladesinger"
+            register={register}
+            defaultChecked={false}
+          />
+          <Checkbox
+            label="Firearms"
+            name="firearms"
+            register={register}
+            defaultChecked={false}
           />
         </SubSection>
       </Section>
